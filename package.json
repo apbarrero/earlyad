@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha --timeout 5000"
+    "test": "NODE_ENV=test mocha --timeout 5000",
+    "bundle": "wt-bundle earlyad-task.js --output ./build/earlyad-task.js"
   },
   "keywords": [
     "dependency",
@@ -29,6 +30,8 @@
   },
   "devDependencies": {
     "chai": "~1.10.0",
-    "mocha": "~2.1.0"
+    "mocha": "~2.1.0",
+    "webtask-bundle": "^1.2.1",
+    "wt-cli": "^1.2.0"
   }
 }
