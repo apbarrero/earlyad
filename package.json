@@ -24,7 +24,7 @@
     "async": "^1.5.2",
     "github": "~0.2.4",
     "semver": "git://github.com/npm/node-semver.git#v5.1.0",
-    "node-fake": "git://github.com/apbarrero/node-fake.git#0.1.0"
+    "node-fake": "git://github.com/apbarrero/node-fake.git#0.2.0"
   },
   "devDependencies": {
     "chai": "~1.10.0",
