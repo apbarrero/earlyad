@@ -220,8 +220,6 @@ function createPullRequest(data, done) {
 //module.exports.checkDepRepoList = checkDepRepoList;
 
 module.exports = function (ctx, done) {
-   //console.log("BODY: " + JSON.stringify(ctx.body));
-   //console.log("--------------");
 
    github = new GitHubApi({
       // required
@@ -237,6 +235,11 @@ module.exports = function (ctx, done) {
       }
    });
 
+   var repolist = [
+      "apbarrero/earlyad",
+      //"git://github.com/auth0/wt-cli.git"
+   ];
+
    github.authenticate({
       type: "oauth",
       token: ctx.data.GITHUB_TOKEN
@@ -249,18 +252,44 @@ module.exports = function (ctx, done) {
    else {
       var newVersion = webhook.ref;
       var repo = webhook.repository.git_url;
-      //console.log("Repository: " + repo);
-      //console.log("New version: " + newVersion);
-      var out;
-      if (isNewerVersion(newVersion, '0.0.42')) {
-         out = "Version " + newVersion + " for " + repo + " is greater than 0.0.42";
-      }
-      else {
-         out = "Version " + newVersion + " for " + repo + " is not greater than 0.0.42";
-      }
+      var reposToUpdate;
+      async.series([
+         function(callback) {
+            console.log("repolist: " + repolist);
+            checkDepRepoList(repolist, { url: repo, version: newVersion }, function(err, res) {
+               if (err) callback(err);
+               else
+                  if (res) {
+                     console.log("Detected need to update dependency on " + repo + " for " + res);
+                  }
+                  else {
+                     console.log("No need to update " + repo);
+                  }
+                  callback(null, res);
+            });
+         },
+         function(callback) {
+            async.map(reposToUpdate, function(r, callback) {
+               var data = {
+                  repoUrl: r.repo,
+                  pack: r.pack,
+                  title: "Update dependency on " + repo + " to new version " + newVersion
+               };
 
-      console.log(out);
-      done(null, out);
+               createPullRequest(data, callback);
+            }, function(err, res) {
+               if (err) callback(err);
+               else {
+                  console.log("Created pull request for " + res);
+                  callback(null);
+               }
+            });
+         }
+      ], function(err, res) {
+         if (err) done(err)
+         else
+            done(null, "Success");
+      });
    }
 };
 
