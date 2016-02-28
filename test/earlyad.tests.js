@@ -241,6 +241,18 @@ describe('Early adopter', function() {
             });
          });
       });
+
+      describe('when no repo in the list needs to update the dependency', function() {
+         it('should return empty array', function(done) {
+            var newPackage = { url: 'git://github.com/dontdepend/onthis.git', version: '99.99.99' };
+            ea.checkDepRepoList(repolist, newPackage, function(err, res) {
+                  assert.isNull(err);
+                  assert.isArray(res);
+                  assert.lengthOf(res, 0);
+                  done();
+            });
+         });
+      });
    });
 });
 
