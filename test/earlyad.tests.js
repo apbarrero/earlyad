@@ -190,15 +190,10 @@ describe('Early adopter', function() {
    describe('fetchPackageJson', function() {
       it('should return package.json contents for a github repository', function(done) {
          ea.fetchPackageJson('apbarrero/earlyad', function(err, res) {
-            if (err) {
-               throw err;
-               done();
-            }
-            else {
-               assert.equal(res.name, 'earlyad');
-               assert.equal(res.description, "Early adopter is a node.js dependency checker and updater");
-               done();
-            }
+            assert.isNull(err);
+            assert.equal(res.name, 'earlyad');
+            assert.equal(res.description, "Early adopter is a node.js dependency checker and updater");
+            done();
          });
       });
    });
@@ -209,29 +204,19 @@ describe('Early adopter', function() {
       it('should return the repository package object with dependency list properly updated when one dependency needs to be updated', function(done) {
          var newSemver = { url: 'git://github.com/npm/node-semver.git', version: '99.99.99' };
          ea.checkDepRepo(repo, newSemver, function(err, res) {
-            if (err) {
-               throw err;
-               done();
-            }
-            else {
-               var earlyadPack = res;
-               assert.equal(earlyadPack.name, 'earlyad');
-               assert.propertyVal(earlyadPack.dependencies, "semver", newSemver.url + "#" + newSemver.version);
-               done();
-            }
+            assert.isNull(err);
+            var earlyadPack = res;
+            assert.equal(earlyadPack.name, 'earlyad');
+            assert.propertyVal(earlyadPack.dependencies, "semver", newSemver.url + "#" + newSemver.version);
+            done();
          })
       });
       it('should return null if repo doesn\'t include the given dependency', function(done) {
          var newSemver = { url: 'git://github.com/dontdepend/onthis.git', version: '99.99.99' };
          ea.checkDepRepo(repo, newSemver, function(err, res) {
-            if (err) {
-               throw err;
-               done();
-            }
-            else {
-               assert.isNull(res);
-               done();
-            }
+            assert.isNull(err);
+            assert.isNull(res);
+            done();
          });
       });
    });
@@ -246,18 +231,13 @@ describe('Early adopter', function() {
          it('should return one package object with the updated dependency list', function(done) {
             var newSemver = { url: 'git://github.com/npm/node-semver.git', version: '99.99.99' };
             ea.checkDepRepoList(repolist, newSemver, function(err, res) {
-               if (err) {
-                  throw err;
-                  done();
-               }
-               else {
+                  assert.isNull(err);
                   assert.lengthOf(res, 1);
                   assert.equal(res[0].repo, 'apbarrero/earlyad');
                   var earlyadPack = res[0].pack;
                   assert.equal(earlyadPack.name, 'earlyad');
                   assert.propertyVal(earlyadPack.dependencies, "semver", newSemver.url + "#" + newSemver.version);
                   done();
-               }
             });
          });
       });
