@@ -1,6 +1,6 @@
 {
   "name": "earlyad",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Early adopter is a node.js dependency checker and updater",
   "main": "index.js",
   "directories": {
