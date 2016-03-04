@@ -23,7 +23,6 @@
   "dependencies": {
     "async": "^1.5.2",
     "github": "~0.2.4",
-    "moment": "^2.11.2",
     "semver": "git://github.com/npm/node-semver.git#v5.1.0"
   },
   "devDependencies": {
